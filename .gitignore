@@ -141,3 +141,18 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+# SplitLearn generated files
+data/*
+output/*
+
+# Large video files
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# Keep sample metadata for development
+!data/sample-metadata.json
+
+# Python virtual environment
+.venv/
