@@ -1,0 +1,22 @@
+{
+  "segment_duration": 10,
+  "qualities": {
+    "high": {
+      "resolution": "1280x720",
+      "label": "720p"
+    },
+    "medium": {
+      "resolution": "854x480",
+      "label": "480p"
+    },
+    "low": {
+      "resolution": "640x360",
+      "label": "360p"
+    }
+  },
+  "content_types": [
+    "slide",
+    "talking_head",
+    "high_motion"
+  ]
+}

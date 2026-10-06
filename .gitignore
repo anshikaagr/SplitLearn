@@ -153,3 +153,6 @@ output/*
 
 # Keep sample metadata for development
 !data/sample-metadata.json
+
+# Python virtual environment
+.venv/
