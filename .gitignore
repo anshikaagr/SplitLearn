@@ -150,3 +150,6 @@ output/*
 *.avi
 *.mov
 *.mkv
+
+# Keep sample metadata for development
+!data/sample-metadata.json

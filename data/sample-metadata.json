@@ -1,0 +1,72 @@
+{
+  "video_id": "lecture_001",
+  "video_name": "sample_lecture.mp4",
+  "duration": 30,
+  "segment_duration": 10,
+  "total_segments": 3,
+  "segments": [
+    {
+      "segment_id": 1,
+      "start_time": 0,
+      "end_time": 10,
+      "content_type": "slide",
+      "motion_score": 0.08,
+      "qualities": {
+        "high": {
+          "path": "/segments/1/high.mp4",
+          "size_bytes": 4200000
+        },
+        "medium": {
+          "path": "/segments/1/medium.mp4",
+          "size_bytes": 2100000
+        },
+        "low": {
+          "path": "/segments/1/low.mp4",
+          "size_bytes": 900000
+        }
+      }
+    },
+    {
+      "segment_id": 2,
+      "start_time": 10,
+      "end_time": 20,
+      "content_type": "talking_head",
+      "motion_score": 0.32,
+      "qualities": {
+        "high": {
+          "path": "/segments/2/high.mp4",
+          "size_bytes": 5000000
+        },
+        "medium": {
+          "path": "/segments/2/medium.mp4",
+          "size_bytes": 2500000
+        },
+        "low": {
+          "path": "/segments/2/low.mp4",
+          "size_bytes": 1000000
+        }
+      }
+    },
+    {
+      "segment_id": 3,
+      "start_time": 20,
+      "end_time": 30,
+      "content_type": "high_motion",
+      "motion_score": 0.72,
+      "qualities": {
+        "high": {
+          "path": "/segments/3/high.mp4",
+          "size_bytes": 6000000
+        },
+        "medium": {
+          "path": "/segments/3/medium.mp4",
+          "size_bytes": 3000000
+        },
+        "low": {
+          "path": "/segments/3/low.mp4",
+          "size_bytes": 1200000
+        }
+      }
+    }
+  ]
+}
