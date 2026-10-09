@@ -7,7 +7,7 @@ const videoRoutes = require("./routes/videoRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
 
 const app = express();
-const PORT = 5000;
+const PORT = 5001;
 
 app.use(cors());
 app.use(express.json());
