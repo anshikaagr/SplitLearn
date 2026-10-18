@@ -5,10 +5,14 @@ const path = require("path");
 const { processVideo } = require("../services/processingService");
 
 const router = express.Router();
+const uploadDirectory = path.join(__dirname, "../uploads");
+
+// Multer cannot write to a directory that does not exist.
+require("fs").mkdirSync(uploadDirectory, { recursive: true });
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, "../uploads"));
+        cb(null, uploadDirectory);
     },
 
     filename: (req, file, cb) => {
