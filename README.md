@@ -95,7 +95,7 @@ Install the following tools:
 ### 1. Clone the Repository
 
 ```bash
-git clone <https://github.com/anshikaagr/SplitLearn.git>
+git clone https://github.com/anshikaagr/SplitLearn.git
 cd SplitLearn
 ```
 
@@ -136,6 +136,10 @@ npm run dev
 ```
 
 The frontend and backend must both be running for the complete application workflow to function.
+
+<img width="1535" height="762" alt="Screenshot 2026-10-26 013130" src="https://github.com/user-attachments/assets/333339bd-8a8b-43e4-94a9-87f20edcc24b" />
+
+<img width="1376" height="715" alt="Screenshot 2026-10-26 013151" src="https://github.com/user-attachments/assets/250f06cd-bae7-4f87-9d48-e97ad7e58eee" />
 
 ## 🔮 Future Improvements
 
