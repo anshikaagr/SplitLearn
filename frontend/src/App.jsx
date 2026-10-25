@@ -4,6 +4,7 @@ import ModeToggle from "./components/ModeToggle";
 import { getVideoMetadata } from "./api/videoApi";
 import { getNormalQuality, getSmartQuality } from "./logic/qualitySelector";
 import "./App.css";
+import VideoUpload from "./components/VideoUpload";
 
 const QUALITY_MBPS = { low: 0.45, medium: 1.1, high: 2.4 };
 const QUALITY_LABEL = { low: "360p · Data saver", medium: "480p · Balanced", high: "720p · HD" };
@@ -122,8 +123,37 @@ function App() {
             <article className="admin-summary-card"><span className="muted-label">SIMULATED NETWORK</span><b>{Number(bandwidth).toFixed(1)} Mbps</b><small>Adjust using the network simulator below</small></article>
           </div>
           <div className="admin-notice"><span>ⓘ</span><p>This portal is a project demonstration, not a secure account system. The values here reflect the current browser session; no user authentication or persistent class records are configured.</p></div>
-        </section>}
+        </section>
+        }
+        {portal === "teacher" && (
+<VideoUpload
+onUploadSuccess={async (result) => {
+console.log("Upload response:", result);
 
+  if (!result.videoId) {
+    console.error("Upload response is missing videoId:", result);
+    return;
+  }
+
+  try {
+    const metadata = await getVideoMetadata(result.videoId);
+
+    console.log("New video metadata:", metadata);
+
+    setVideo(metadata);
+    setSelectedIndex(0);
+    setPlayerError(false);
+    setBackendOnline(metadata.source === "backend");
+    setPortal("student");
+  } catch (error) {
+    console.error("Failed to load uploaded video:", error);
+  }
+}}
+
+/>
+)}
+
+          
         <section className="metric-grid" aria-label="Streaming metrics">
           <article className="metric-card"><div className="metric-top"><span>SIMULATED BANDWIDTH</span><span className="metric-icon violet">⌁</span></div><div className="metric-value">{Number(bandwidth).toFixed(1)} <small>Mbps</small></div><div className="metric-foot"><span className="live-dot" /> Live simulation <span className="metric-note">Adjust below</span></div><div className="sparkline spark-purple"><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/></div></article>
           <article className="metric-card"><div className="metric-top"><span>SELECTED QUALITY</span><span className="metric-icon cyan">◉</span></div><div className="metric-value">{selectedQuality.toUpperCase()}<small className="quality-resolution">{selectedQuality === "high" ? "720p" : selectedQuality === "medium" ? "480p" : "360p"}</small></div><div className="quality-track"><i className={selectedQuality} /></div><div className="metric-foot">Adapted to current conditions</div></article>

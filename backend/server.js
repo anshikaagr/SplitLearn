@@ -16,6 +16,10 @@ app.use(
     "/qualities",
     express.static(path.join(__dirname, "../output/qualities"))
 );
+app.use(
+    "/videos",
+    express.static(path.join(__dirname, "../output/videos"))
+);
 
 app.get("/api/health", (req, res) => {
     res.json({

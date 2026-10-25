@@ -1,12 +1,8 @@
+import argparse
 import json
-import sys
 import subprocess
+import sys
 from pathlib import Path
-
-
-SEGMENTS_DIR = Path("output/segments")
-QUALITIES_DIR = Path("output/qualities")
-OUTPUT_FILE = Path("output/metadata.json")
 
 
 def get_duration(video_path):
@@ -15,14 +11,14 @@ def get_duration(video_path):
         "-v", "error",
         "-show_entries", "format=duration",
         "-of", "default=noprint_wrappers=1:nokey=1",
-        str(video_path)
+        str(video_path),
     ]
 
     result = subprocess.run(
         command,
         capture_output=True,
         text=True,
-        check=True
+        check=True,
     )
 
     return round(float(result.stdout.strip()), 2)
@@ -32,31 +28,42 @@ def get_motion_analysis(segment):
     command = [
         sys.executable,
         "processing/opencv/analyze_segment.py",
-        str(segment)
+        str(segment),
     ]
 
     result = subprocess.run(
         command,
         capture_output=True,
         text=True,
-        check=True
+        check=True,
     )
 
     return json.loads(result.stdout)
 
 
 def main():
-    segments = sorted(SEGMENTS_DIR.glob("segment_*.mp4"))
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--video-id", required=True)
+    parser.add_argument("--video-name", required=True)
+    parser.add_argument("--segments-dir", required=True)
+    parser.add_argument("--qualities-dir", required=True)
+    parser.add_argument("--output-file", required=True)
+    args = parser.parse_args()
+
+    segments_dir = Path(args.segments_dir).resolve()
+    qualities_dir = Path(args.qualities_dir).resolve()
+    output_file = Path(args.output_file).resolve()
+
+    segments = sorted(segments_dir.glob("segment_*.mp4"))
 
     if not segments:
-        print("No segments found.")
-        return
+        raise RuntimeError(f"No segments found in {segments_dir}")
 
     metadata = {
-        "video_id": "lecture_001",
-        "video_name": "lecture.mp4",
+        "video_id": args.video_id,
+        "video_name": args.video_name,
         "total_segments": len(segments),
-        "segments": []
+        "segments": [],
     }
 
     for index, segment in enumerate(segments):
@@ -71,26 +78,24 @@ def main():
             "motion_score": analysis["motion_score"],
             "content_type": analysis["content_type"],
             "qualities": {
-                "high": {
-                    "path": f"/qualities/high/{segment.stem}_high.mp4"
-                },
-                "medium": {
-                    "path": f"/qualities/medium/{segment.stem}_medium.mp4"
-                },
-                "low": {
-                    "path": f"/qualities/low/{segment.stem}_low.mp4"
+                quality: {
+                    "path": (
+                        f"/videos/{args.video_id}/qualities/"
+                        f"{quality}/{segment.stem}_{quality}.mp4"
+                    )
                 }
-            }
+                for quality in ("high", "medium", "low")
+            },
         }
 
         metadata["segments"].append(segment_data)
 
-    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
+    output_file.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as file:
+    with output_file.open("w", encoding="utf-8") as file:
         json.dump(metadata, file, indent=2)
 
-    print(f"\nMetadata created: {OUTPUT_FILE}")
+    print(f"Metadata created: {output_file}")
 
 
 if __name__ == "__main__":

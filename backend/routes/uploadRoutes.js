@@ -39,28 +39,29 @@ const upload = multer({
 router.post("/", upload.single("video"), async (req, res) => {
     if (!req.file) {
         return res.status(400).json({
-            error: "No video file uploaded"
+            message: "No video file uploaded",
         });
     }
 
     try {
         console.log(`Video uploaded: ${req.file.filename}`);
 
-        const result = await processVideo(req.file.path);
+        const result = await processVideo(req.file.path, req.file.filename);
 
-        res.json({
+        return res.status(200).json({
             message: "Video uploaded and processed successfully",
             filename: req.file.filename,
-            processing: result
+            videoId: result.videoId,
+            metadata: result.metadata,
+            processing: result,
         });
-
     } catch (error) {
         console.error("Processing error:", error);
 
-        res.status(500).json({
+        return res.status(500).json({
             message: "Video uploaded but processing failed",
             filename: req.file.filename,
-            error: error.message
+            error: error.message,
         });
     }
 });

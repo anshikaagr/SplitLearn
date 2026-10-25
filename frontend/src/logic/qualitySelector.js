@@ -13,6 +13,10 @@ export function getNormalQuality(bandwidthMbps) {
 export function getSmartQuality(bandwidthMbps, contentType) {
   // Very weak network
   if (bandwidthMbps < 1) {
+    if (contentType === "slide") {
+      return "medium";
+    }
+
     return "low";
   }
 
