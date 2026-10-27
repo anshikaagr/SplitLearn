@@ -22,3 +22,16 @@ export async function getVideoMetadata(videoId) {
     segments: data.segments || [],
   };
 }
+
+
+export async function getAvailableVideos() {
+  const response = await fetch(`${API_BASE_URL}/api/videos`);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch available lectures.");
+  }
+
+  const data = await response.json();
+
+  return Array.isArray(data) ? data : data.videos || [];
+}

@@ -5,6 +5,7 @@ import { getVideoMetadata } from "./api/videoApi";
 import { getNormalQuality, getSmartQuality } from "./logic/qualitySelector";
 import "./App.css";
 import VideoUpload from "./components/VideoUpload";
+import RoleLogin from "./components/RoleLogin";
 
 const QUALITY_MBPS = { low: 0.45, medium: 1.1, high: 2.4 };
 const QUALITY_LABEL = { low: "360p · Data saver", medium: "480p · Balanced", high: "720p · HD" };
@@ -20,6 +21,8 @@ function App() {
   const [playerError, setPlayerError] = useState(false);
   const [activeSection, setActiveSection] = useState("overview");
   const [portal, setPortal] = useState("student");
+  const [signedIn, setSignedIn] = useState(false);
+  const [loginRole, setLoginRole] = useState("student");
 
   useEffect(() => {
     let active = true;
@@ -77,6 +80,19 @@ function App() {
   }
 
 
+if (!signedIn) {
+  return (
+    <RoleLogin
+      onLogin={(role) => {
+        setLoginRole(role);
+        setPortal(role);
+        setSignedIn(true);
+      }}
+    />
+  );
+}
+
+
   if (loading) {
     return <main className="loading-screen"><div className="loading-mark">S</div><p>Preparing your learning workspace…</p></main>;
   }
@@ -92,10 +108,19 @@ function App() {
         <button type="button" className={`nav-item ${activeSection === "player" ? "active" : ""}`} onClick={() => navigateTo("player")}><span>▷</span> Video player</button>
         <button type="button" className={`nav-item ${activeSection === "analytics" ? "active" : ""}`} onClick={() => navigateTo("analytics")}><span>⌁</span> Streaming analytics</button>
         <div className="side-label side-label-spaced">PORTALS</div>
-        <div className="portal-switch" role="group" aria-label="Choose portal">
-          <button type="button" className={portal === "student" ? "selected" : ""} onClick={() => setPortal("student")}>🎓 Student</button>
-          <button type="button" className={portal === "teacher" ? "selected" : ""} onClick={() => setPortal("teacher")}>⚙ Teacher / Admin</button>
-        </div>
+        <div className="portal-switch">
+        <span>{portal === "teacher" ? "Admin / Faculty" : "Student"} Portal</span>
+        <button
+          type="button"
+          onClick={() => {
+            setSignedIn(false);
+            setLoginRole("student");
+            setPortal("student");
+          }}
+        >
+          Log out
+        </button>
+      </div>
         <div className="side-label side-label-spaced">PROJECT</div>
         <div className="project-chip"><span className="project-dot" /> Adaptive video<br /> <b>lecture_001</b></div>
         <div className="sidebar-bottom">
@@ -106,7 +131,7 @@ function App() {
       <main className="main-content" id="overview">
         <header className="topbar">
           <div className="breadcrumbs">Workspace <span>/</span> <b>{portal === "teacher" ? "Teacher / Admin Portal" : activeSection === "player" ? "Video player" : activeSection === "analytics" ? "Streaming analytics" : "Student Portal"}</b></div>
-          <div className="topbar-right"><span className={`status-pill ${backendOnline ? "online" : "simulated"}`}><i />{backendOnline ? "Backend connected" : "Demo mode"}</span><div className="top-avatar">SL</div></div>
+          <div className="topbar-right" aria-hidden="true"></div>
         </header>
 
         <section className="welcome-row">
